@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ollama
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    # Source 1: The official Helm chart from the internet
+    - repoURL: 'https://helm.otwld.com'
+      chart: ollama
+      targetRevision: 1.57.0 
+      helm:
+        valueFiles:
+          - $my-git-repo/ollama/values.yaml
+    # Source 2: Your personal GitHub repository holding the settings
+    - repoURL: 'https://github.com/Dimitrensen/pi-cluster-gitops.git'
+      targetRevision: HEAD
+      ref: my-git-repo
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: ollama
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
