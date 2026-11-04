@@ -1,8 +1,8 @@
-# ollama:
-#   # Instructs the pod to automatically pull a model into memory when it boots
-#   models:
-#     pull:
-#       - llama3.1
+ollama:
+  # Instructs the pod to automatically pull a model into memory when it boots
+  models:
+    pull:
+      - llama3.1
 
 # Pin the pod to your 16GB AI node, completely avoiding the 8GB nodes
 nodeSelector:
