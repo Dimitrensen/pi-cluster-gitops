@@ -15,3 +15,7 @@ resources:
     cpu: "2000m"
   limits:
     memory: "14Gi"
+
+service:
+  type: NodePort
+  nodePort: 31434
