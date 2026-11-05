@@ -24,3 +24,8 @@ persistence:
   enabled: true
   size: 20Gi
   storageClass: local-path
+
+extraInitContainers:
+  - name: wait-for-dns
+    image: busybox:1.36
+    command: ['sh', '-c', 'until nslookup registry.ollama.ai; do echo waiting for DNS; sleep 2; done']
