@@ -1,0 +1,30 @@
+nodeSelector:
+  kubernetes.io/hostname: argo-pi
+
+adminPassword: admin
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    memory: 256Mi
+
+persistence:
+  enabled: true
+  size: 1Gi
+  storageClassName: local-path
+
+service:
+  type: NodePort
+  nodePort: 30300
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://observability-prometheus-server.monitoring.svc.cluster.local
+        access: proxy
+        isDefault: true

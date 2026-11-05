@@ -1,0 +1,30 @@
+server:
+  nodeSelector:
+    kubernetes.io/hostname: argo-pi
+  retention: 2d
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 512Mi
+  persistentVolume:
+    enabled: true
+    size: 5Gi
+    storageClass: local-path
+
+alertmanager:
+  enabled: false
+
+kube-state-metrics:
+  enabled: true
+
+nodeExporter:
+  enabled: true
+
+# Will be scrapped once it exposes metrics
+extraScrapeConfigs: |
+  - job_name: ollama
+    static_configs:
+      - targets: ['ollama.ollama.svc.cluster.local:11434']
+    metrics_path: /metrics
