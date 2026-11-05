@@ -1,14 +1,17 @@
-# ollama:
-#   # Instructs the pod to automatically pull a model into memory when it boots
-#   models:
-#     pull:
-#       - llama3.1
+ollama:
+  # # Instructs the pod to automatically pull a model into memory when it boots
+  # models:
+  #   pull:
+  #     - llama3.1
+  extraEnv:
+    - name: OLLAMA_METRICS
+      value: "true"
 
-# Pin the pod to your 16GB AI node, completely avoiding the 8GB nodes
+# Pins the pod to the 16GB AI node, completely avoiding the 8GB nodes
 nodeSelector:
   hardware-type: high-mem
 
-# Hard limits to safeguard the 16GB Pi from Out-Of-Memory crashes
+# Hard limits to safeguard the 16GB SBC from Out-Of-Memory crashes
 resources:
   requests:
     memory: "8Gi"
