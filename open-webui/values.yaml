@@ -1,0 +1,24 @@
+ollama:
+  enabled: false                    # in order to make sure that a second ollama will not be started
+
+ollamaUrls:
+  - http://ollama.ollama.svc.cluster.local:11434
+
+nodeSelector:
+  kubernetes.io/hostname: ai-pi
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    memory: 1Gi
+
+service:
+  type: NodePort
+  nodePort: 30080
+
+persistence:
+  enabled: true
+  size: 2Gi
+  storageClass: local-path

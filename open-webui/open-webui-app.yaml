@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: open-webui
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - repoURL: https://helm.openwebui.com
+      chart: open-webui
+      targetRevision: 3.1.0          # check latest if you prefer
+      helm:
+        valueFiles:
+          - $values/open-webui/values.yaml
+    - repoURL: https://github.com/Dimitrensen/pi-cluster-gitops.git
+      targetRevision: HEAD
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: open-webui
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
