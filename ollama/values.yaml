@@ -23,7 +23,7 @@ service:
   type: NodePort
   nodePort: 31434
 
-persistence:
+persistentVolume:
   enabled: true
   size: 20Gi
   storageClass: local-path
