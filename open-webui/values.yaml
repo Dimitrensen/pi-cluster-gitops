@@ -20,5 +20,5 @@ service:
 
 persistence:
   enabled: true
-  size: 20Gi
+  size: 2Gi
   storageClass: local-path
