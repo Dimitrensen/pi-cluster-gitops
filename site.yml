@@ -1,0 +1,6 @@
+---
+- name: Deploy discreet health checks
+  hosts: k3s
+  become: true
+  roles:
+    - healthcheck
