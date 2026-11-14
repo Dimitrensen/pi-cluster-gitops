@@ -1,0 +1,31 @@
+---
+- name: Deploy healthcheck script
+  ansible.builtin.template:
+    src: healthcheck.sh.j2
+    dest: /usr/local/bin/healthcheck
+    owner: root
+    group: root
+    mode: '0750'
+
+- name: Deploy systemd service
+  ansible.builtin.copy:
+    src: healthcheck.service
+    dest: /etc/systemd/system/healthcheck.service
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Deploy systemd timer
+  ansible.builtin.copy:
+    src: healthcheck.timer
+    dest: /etc/systemd/system/healthcheck.timer
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Reload systemd and enable timer
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: healthcheck.timer
+    enabled: true
+    state: started

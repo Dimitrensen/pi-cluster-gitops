@@ -1,0 +1,11 @@
+#!/bin/bash
+# Minimal local health snapshot — no hostnames, no IPs, no Tailscale details
+LOG=/var/log/healthcheck.log
+{
+  echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
+  echo "load: $(cut -d' ' -f1-3 /proc/loadavg)"
+  echo "mem: $(free -m | awk '/Mem:/ {printf "%d/%d MB", $3, $2}')"
+  echo "disk: $(df -h / | awk 'NR==2 {print $5}')"
+  echo "k3s: $(systemctl is-active k3s 2>/dev/null || echo inactive)"
+} >> "$LOG"
+chmod 640 "$LOG" 2>/dev/null || true
