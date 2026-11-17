@@ -1,4 +1,4 @@
-This is just a home lab project which combines LLMOps, K3s, Prometheus & Grafana for Observability, and ArgoCD.
+This a home lab project which combines LLMOps, K3s, Prometheus & Grafana for Observability, and ArgoCD.
 
 For the local LLM I used Ollama 3b, and webUI "https://github.com/open-webui/open-webui" for its AI interface.
 
