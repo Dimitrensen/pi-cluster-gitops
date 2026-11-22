@@ -1,0 +1,9 @@
+# Model profile used by the ai-pi Ansible playbook. Hailo-Ollama only accepts
+# models compiled for the installed Hailo runtime. Confirm this exact model
+# identifier with GET /hailo/v1/list before enabling the pull task.
+hailo_llm_model_name: qwen2.5-coder:1.5b
+
+# The Hailo-Ollama service runs on the host, not in Kubernetes.
+hailo_llm_api_bind_host: 0.0.0.0
+hailo_llm_api_port: 8000
+hailo_llm_models_mount: /mnt/models

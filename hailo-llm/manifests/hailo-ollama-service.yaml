@@ -1,0 +1,18 @@
+# This provides a stable in-cluster DNS name for Hailo-Ollama, which remains a
+# host-level service on ai-pi. It depends on CoreDNS being able to resolve the
+# Tailscale MagicDNS name; validate that before syncing hailo-qwen.
+apiVersion: v1
+kind: Service
+metadata:
+  name: hailo-ollama
+  namespace: hailo-llm
+  labels:
+    app.kubernetes.io/part-of: hailo-llm
+spec:
+  type: ExternalName
+  externalName: ai-pi.tail021710.ts.net
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8000
+      targetPort: 8000

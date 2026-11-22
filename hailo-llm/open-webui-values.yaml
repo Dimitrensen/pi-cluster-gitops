@@ -1,0 +1,41 @@
+# Hailo-Ollama provides an Ollama-compatible API on ai-pi. Do not deploy the
+# upstream Ollama subchart alongside it.
+ollama:
+  enabled: false
+
+ollamaUrls:
+  - http://hailo-ollama.hailo-llm.svc.cluster.local:8000
+
+# The Hailo path does not need the optional bundled services initially.
+pipelines:
+  enabled: false
+
+tika:
+  enabled: false
+
+websocket:
+  manager: ""
+
+redis:
+  enabled: false
+
+nodeSelector:
+  kubernetes.io/hostname: ai-pi
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    memory: 1Gi
+
+persistence:
+  enabled: true
+  size: 2Gi
+  storageClass: local-path
+
+# 30081 avoids colliding with the legacy Open WebUI service on 30080 while the
+# new Hailo-backed path is validated.
+service:
+  type: NodePort
+  nodePort: 30081

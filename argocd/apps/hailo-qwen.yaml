@@ -1,0 +1,37 @@
+# Staged. argocd/apps/kustomization.yaml does not list this file, so
+# pi-cluster-root will not register it. Add that list entry only after
+# hailo-ollama answers on ai-pi port 8000, then sync this app separately.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hailo-qwen
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: pi-cluster-gitops
+    app.kubernetes.io/component: llm-ui
+spec:
+  project: default
+  sources:
+    - repoURL: https://helm.openwebui.com
+      chart: open-webui
+      targetRevision: 3.1.0
+      helm:
+        valueFiles:
+          - $values/hailo-llm/open-webui-values.yaml
+    - repoURL: https://github.com/Dimitrensen/pi-cluster-gitops.git
+      targetRevision: main
+      ref: values
+    - repoURL: https://github.com/Dimitrensen/pi-cluster-gitops.git
+      targetRevision: main
+      path: hailo-llm/manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: hailo-llm
+  # Manual until Hailo-Ollama is healthy. Same end state as pi-cluster-root:
+  # self-heal on, prune off. Uncommenting automated also syncs new commits.
+  syncPolicy:
+    # automated:
+    #   selfHeal: true
+    #   prune: false
+    syncOptions:
+      - CreateNamespace=true

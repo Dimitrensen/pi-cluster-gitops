@@ -1,0 +1,7 @@
+# Local Ansible state and retry files
+.ansible/
+*.retry
+
+# Secret material is supplied locally or through Ansible Vault, never committed.
+group_vars/ai_pi/vault.yml
+

@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pi-cluster-root
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: pi-cluster-gitops
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Dimitrensen/pi-cluster-gitops.git
+    targetRevision: main
+    path: argocd/apps
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  # Manual until the cutover is stable. The later step is self-heal with
+  # prune still off. Argo CD only accepts selfHeal inside automated, so that
+  # switch also applies new commits on main. Uncomment the automated block
+  # then. Do not set prune while this app could own the live observability
+  # Application; that manifest stays at observability/observability-app.yaml.
+  syncPolicy:
+    # automated:
+    #   selfHeal: true
+    #   prune: false
+    syncOptions:
+      - CreateNamespace=true
