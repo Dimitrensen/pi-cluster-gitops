@@ -1,10 +1,11 @@
-# Hailo-Ollama provides an Ollama-compatible API on ai-pi. Do not deploy the
-# upstream Ollama subchart alongside it.
+# These two keys belong to the Open WebUI chart. enabled: false stops the
+# chart from deploying its own model server. The address is our hailo-qwen
+# Service, which points at the host API on ai-pi.
 ollama:
   enabled: false
 
 ollamaUrls:
-  - http://hailo-ollama.hailo-llm.svc.cluster.local:8000
+  - http://hailo-qwen.hailo-llm.svc.cluster.local:8000
 
 # The Hailo path does not need the optional bundled services initially.
 pipelines:

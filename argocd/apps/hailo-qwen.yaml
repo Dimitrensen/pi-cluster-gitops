@@ -26,7 +26,7 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: hailo-llm
-  # Manual until Hailo-Ollama is healthy. Same end state as pi-cluster-root:
+  # Manual until the host API is healthy. Same end state as pi-cluster-root:
   # self-heal on, prune off. Uncommenting automated also syncs new commits.
   syncPolicy:
     # automated:
