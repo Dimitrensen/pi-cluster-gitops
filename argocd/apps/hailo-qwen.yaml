@@ -1,6 +1,5 @@
-# Staged. argocd/apps/kustomization.yaml does not list this file, so
-# pi-cluster-root will not register it. Add that list entry only after
-# hailo-ollama answers on ai-pi port 8000, then sync this app separately.
+# Registered by pi-cluster-root. Sync this app on its own. Open WebUI stays
+# pinned to ai-pi and calls the host Hailo API on port 8000.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

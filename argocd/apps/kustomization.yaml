@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-# Intentionally empty. The first sync of pi-cluster-root creates no Applications.
 # The live observability app remains observability/observability-app.yaml.
-# Add hailo-qwen.yaml here only after hailo-ollama answers on ai-pi port 8000.
-# Listing it registers the app. It still waits for its own manual sync.
-resources: []
+# hailo-qwen is manual: listing it registers the Application, and its own sync
+# deploys Open WebUI.
+resources:
+  - hailo-qwen.yaml
