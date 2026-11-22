@@ -21,10 +21,3 @@ kube-state-metrics:
 
 nodeExporter:
   enabled: true
-
-# Will be scrapped once it exposes metrics
-extraScrapeConfigs: |
-  - job_name: ollama
-    static_configs:
-      - targets: ['ollama.ollama.svc.cluster.local:11434']
-    metrics_path: /metrics
