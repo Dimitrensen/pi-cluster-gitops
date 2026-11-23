@@ -10,9 +10,22 @@ ollamaUrls:
 
 # Open WebUI otherwise keeps the first saved URL in its database and ignores
 # later changes to the chart URL above. False makes this chart value win on each start.
+# The Hailo API returns HTTP 500 for a tools list and for keep_alive as text.
+# Open WebUI shows that as "Server Connection Error". These settings leave
+# one plain chat request: no builtin tools, no title, tags, or follow-up call.
 extraEnvVars:
   - name: ENABLE_PERSISTENT_CONFIG
     value: "False"
+  - name: ENABLE_TITLE_GENERATION
+    value: "False"
+  - name: ENABLE_TAGS_GENERATION
+    value: "False"
+  - name: ENABLE_FOLLOW_UP_GENERATION
+    value: "False"
+  - name: DEFAULT_MODEL_PARAMS
+    value: '{"function_calling":"legacy"}'
+  - name: DEFAULT_MODEL_METADATA
+    value: '{"capabilities":{"builtin_tools":false},"builtinTools":{"time":false,"user_input":false,"files":false,"knowledge":false,"chats":false,"subagents":false,"memory":false,"web_search":false,"image_generation":false,"video_generation":false,"code_interpreter":false,"notes":false,"channels":false,"skills":false,"tools":false,"tasks":false,"automations":false,"calendar":false,"notifications":false,"visualizations":false}}'
 
 # The Hailo path does not need the optional bundled services initially.
 pipelines:
