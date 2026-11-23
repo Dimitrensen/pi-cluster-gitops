@@ -3,6 +3,9 @@ kind: Application
 metadata:
   name: observability
   namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: pi-cluster-gitops
+    app.kubernetes.io/component: observability
 spec:
   project: default
   sources:
