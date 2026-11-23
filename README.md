@@ -1,6 +1,6 @@
 This a home lab project which combines LLMOps, K3s, Prometheus & Grafana for Observability, and ArgoCD.
 
-For the local LLM I used Ollama 3b, and webUI "https://github.com/open-webui/open-webui" for its AI interface.
+The local model is qwen2.5-coder:1.5b on the Hailo AI HAT. Open WebUI, from https://github.com/open-webui/open-webui, is the chat page.
 
 There is also Agentic Ansible Playbooks developed right now called via MCP server. An agent can be used via the terminal in order to configure playbooks without manual input other than chatting. The playbooks are covering automation and configuration areas that are outside K3s' scope.
 

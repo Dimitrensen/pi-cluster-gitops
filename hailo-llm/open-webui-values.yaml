@@ -1,11 +1,18 @@
-# These two keys belong to the Open WebUI chart. enabled: false stops the
-# chart from deploying its own model server. The address is our hailo-qwen
-# Service, which points at the host API on ai-pi.
+# These two keys are the Open WebUI chart's own names. The chart defaults
+# ollama.enabled to true and would install its model server in the cluster.
+# false is the off switch. ollamaUrls is copied into OLLAMA_BASE_URLS, which
+# is how that program finds a model API. The address is the hailo-qwen Service.
 ollama:
   enabled: false
 
 ollamaUrls:
   - http://hailo-qwen.hailo-llm.svc.cluster.local:8000
+
+# Open WebUI otherwise keeps the first saved URL in its database and ignores
+# later changes to the chart URL above. False makes this chart value win on each start.
+extraEnvVars:
+  - name: ENABLE_PERSISTENT_CONFIG
+    value: "False"
 
 # The Hailo path does not need the optional bundled services initially.
 pipelines:
