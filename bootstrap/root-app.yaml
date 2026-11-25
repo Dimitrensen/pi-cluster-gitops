@@ -8,7 +8,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Dimitrensen/pi-cluster-gitops.git
+    repoURL: https://github.com/Dimitrensen/pi-ops-cluster.git
     targetRevision: main
     path: argocd/apps
   destination:

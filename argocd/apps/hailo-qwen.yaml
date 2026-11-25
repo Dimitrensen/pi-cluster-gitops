@@ -17,10 +17,10 @@ spec:
       helm:
         valueFiles:
           - $values/hailo-llm/open-webui-values.yaml
-    - repoURL: https://github.com/Dimitrensen/pi-cluster-gitops.git
+    - repoURL: https://github.com/Dimitrensen/pi-ops-cluster.git
       targetRevision: main
       ref: values
-    - repoURL: https://github.com/Dimitrensen/pi-cluster-gitops.git
+    - repoURL: https://github.com/Dimitrensen/pi-ops-cluster.git
       targetRevision: main
       path: hailo-llm/manifests
   destination:

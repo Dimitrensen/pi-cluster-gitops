@@ -21,7 +21,7 @@ spec:
       helm:
         valueFiles:
           - $values/observability/grafana-values.yaml
-    - repoURL: https://github.com/Dimitrensen/pi-cluster-gitops.git
+    - repoURL: https://github.com/Dimitrensen/pi-ops-cluster.git
       targetRevision: HEAD
       ref: values
   destination:
