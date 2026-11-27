@@ -1,6 +1,9 @@
 # Single-binary Loki on argo-pi. Logs store for Grafana; Promtail (or Alloy) ships logs in.
 deploymentMode: SingleBinary
 
+service:
+  type: NodePort
+
 loki:
   auth_enabled: false
   commonConfig:
