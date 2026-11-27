@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: loki
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: pi-cluster-gitops
+    app.kubernetes.io/component: observability
+spec:
+  project: default
+  sources:
+    - repoURL: https://grafana.github.io/helm-charts
+      chart: loki
+      targetRevision: 6.29.0
+      helm:
+        releaseName: loki
+        valueFiles:
+          - $values/observability/loki-values.yaml
+    - repoURL: https://github.com/Dimitrensen/pi-ops-cluster.git
+      targetRevision: HEAD
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

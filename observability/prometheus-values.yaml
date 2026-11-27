@@ -38,7 +38,7 @@ extraScrapeConfigs: |
       - targets:
           - http://pi-cluster.tail021710.ts.net:30081
           - http://pi-cluster.tail021710.ts.net:30300
-          - http://ai-pi.tail021710.ts.net:8090
+          - http://ai-pi.tail021710.ts.net:8000
         labels:
           probe_from: pi-hole
     relabel_configs:
