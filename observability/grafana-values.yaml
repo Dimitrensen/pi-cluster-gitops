@@ -25,10 +25,154 @@ datasources:
     datasources:
       - name: Prometheus
         type: prometheus
+        uid: prometheus
         url: http://observability-prometheus-server.monitoring.svc.cluster.local
         access: proxy
         isDefault: true
       - name: Loki
         type: loki
+        uid: loki
         url: http://loki.monitoring.svc.cluster.local:3100
         access: proxy
+
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+      - name: default
+        orgId: 1
+        folder: Lab
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/default
+
+dashboards:
+  default:
+    ai-pi-thermal:
+      json: |
+        {
+          "uid": "aipi-thermal",
+          "title": "ai-pi temperature",
+          "tags": ["ai-pi", "thermal"],
+          "timezone": "browser",
+          "refresh": "30s",
+          "schemaVersion": 39,
+          "time": { "from": "now-6h", "to": "now" },
+          "panels": [
+            {
+              "id": 1,
+              "type": "timeseries",
+              "title": "ai-pi CPU temperature",
+              "gridPos": { "h": 10, "w": 24, "x": 0, "y": 0 },
+              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "celsius",
+                  "min": 20,
+                  "max": 100,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      { "color": "green", "value": null },
+                      { "color": "yellow", "value": 60 },
+                      { "color": "red", "value": 70 }
+                    ]
+                  }
+                }
+              },
+              "targets": [
+                {
+                  "refId": "A",
+                  "expr": "node_thermal_zone_temp{node=\"ai-pi\",type=\"cpu-thermal\"}",
+                  "legendFormat": "CPU thermal",
+                  "range": true,
+                  "datasource": { "type": "prometheus", "uid": "prometheus" }
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "type": "gauge",
+              "title": "ai-pi CPU now",
+              "gridPos": { "h": 6, "w": 8, "x": 0, "y": 10 },
+              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "celsius",
+                  "min": 20,
+                  "max": 100,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      { "color": "green", "value": null },
+                      { "color": "yellow", "value": 60 },
+                      { "color": "red", "value": 70 }
+                    ]
+                  }
+                }
+              },
+              "options": {
+                "reduceOptions": { "calcs": ["lastNotNull"] },
+                "showThresholdMarkers": true
+              },
+              "targets": [
+                {
+                  "refId": "A",
+                  "expr": "node_thermal_zone_temp{node=\"ai-pi\",type=\"cpu-thermal\"}",
+                  "instant": true,
+                  "datasource": { "type": "prometheus", "uid": "prometheus" }
+                }
+              ]
+            }
+          ]
+        }
+
+alerting:
+  ai-pi-thermal.yaml:
+    apiVersion: 1
+    groups:
+      - orgId: 1
+        name: ai-pi
+        folder: Lab
+        interval: 1m
+        rules:
+          - uid: aipi-cpu-temp-70
+            title: ai-pi CPU temperature above 70C
+            condition: B
+            for: 2m
+            noDataState: NoData
+            execErrState: Error
+            annotations:
+              summary: ai-pi CPU thermal zone has been over 70C for 2 minutes
+            labels:
+              severity: warning
+            data:
+              - refId: A
+                relativeTimeRange:
+                  from: 300
+                  to: 0
+                datasourceUid: prometheus
+                model:
+                  editorMode: code
+                  expr: node_thermal_zone_temp{node="ai-pi",type="cpu-thermal"}
+                  instant: true
+                  refId: A
+              - refId: B
+                datasourceUid: __expr__
+                model:
+                  type: threshold
+                  expression: A
+                  refId: B
+                  conditions:
+                    - evaluator:
+                        type: gt
+                        params: [70]
+                      operator:
+                        type: and
+                      query:
+                        params: [A]
+                      reducer:
+                        type: last
+                      type: query
