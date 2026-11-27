@@ -21,3 +21,46 @@ kube-state-metrics:
 
 nodeExporter:
   enabled: true
+
+# Pi Zero 2 W (pi-hole) sits on argo-pi eth0 at 192.168.50.10.
+# Prometheus runs on argo-pi, so scrape the ethernet address, not Tailscale.
+extraScrapeConfigs: |
+  - job_name: pi-hole-node
+    static_configs:
+      - targets: ["192.168.50.10:9100"]
+        labels:
+          instance: pi-hole
+  - job_name: pi-hole-blackbox-http
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+          - http://pi-cluster.tail021710.ts.net:30081
+          - http://pi-cluster.tail021710.ts.net:30300
+          - http://ai-pi.tail021710.ts.net:8090
+        labels:
+          probe_from: pi-hole
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.50.10:9115
+  - job_name: pi-hole-blackbox-tcp
+    metrics_path: /probe
+    params:
+      module: [tcp_connect]
+    static_configs:
+      - targets:
+          - pi-cluster.tail021710.ts.net:32347
+        labels:
+          probe_from: pi-hole
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.50.10:9115
