@@ -1,0 +1,30 @@
+---
+- name: Install python3 so later Ansible runs work
+  ansible.builtin.apt:
+    name: python3
+    state: present
+    update_cache: true
+
+- name: Create dimi with sudo
+  ansible.builtin.user:
+    name: dimi
+    groups: sudo
+    append: true
+    shell: /bin/bash
+    create_home: true
+    password_lock: true
+
+- name: Allow dimi to sudo without a password
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/roles/sudoers/files/010_dimi-nopasswd"
+    dest: /etc/sudoers.d/010_dimi-nopasswd
+    owner: root
+    group: root
+    mode: "0440"
+    validate: visudo -cf %s
+
+- name: Install dedicated pi-hole SSH public key for dimi
+  ansible.builtin.authorized_key:
+    user: dimi
+    key: "{{ lookup('file', playbook_dir + '/inventory/keys/pi-hole.pub') }}"
+    state: present

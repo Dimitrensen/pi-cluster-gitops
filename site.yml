@@ -11,8 +11,9 @@
   roles:
     - healthcheck
 
-- name: Pi Zero chrony for the lab
+- name: Pi Zero user dimi and chrony for the lab
   hosts: pi_hole
   become: true
   roles:
+    - pihole_user
     - pihole_ntp
