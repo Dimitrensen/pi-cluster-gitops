@@ -34,6 +34,14 @@ datasources:
         uid: loki
         url: http://loki.monitoring.svc.cluster.local:3100
         access: proxy
+      - name: Alertmanager
+        type: alertmanager
+        uid: alertmanager
+        url: http://observability-alertmanager.monitoring.svc.cluster.local:9093
+        access: proxy
+        jsonData:
+          implementation: prometheus
+          handleGrafanaManagedAlerts: true
 
 dashboardProviders:
   dashboardproviders.yaml:
@@ -176,3 +184,26 @@ alerting:
                       reducer:
                         type: last
                       type: query
+
+  contactpoints.yaml:
+    apiVersion: 1
+    contactPoints:
+      - orgId: 1
+        name: prometheus-alertmanager
+        receivers:
+          - uid: am-lab
+            type: prometheus-alertmanager
+            settings:
+              url: http://observability-alertmanager.monitoring.svc.cluster.local:9093
+
+  policies.yaml:
+    apiVersion: 1
+    policies:
+      - orgId: 1
+        receiver: prometheus-alertmanager
+        group_by:
+          - grafana_folder
+          - alertname
+        group_wait: 30s
+        group_interval: 5m
+        repeat_interval: 4h

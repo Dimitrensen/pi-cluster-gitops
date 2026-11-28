@@ -13,8 +13,22 @@ server:
     size: 5Gi
     storageClass: local-path
 
+# Grafana unified alerting sends here. No Slack/email receiver yet; firing
+# alerts show in the Alertmanager UI and in Grafana.
 alertmanager:
-  enabled: false
+  enabled: true
+  nodeSelector:
+    kubernetes.io/hostname: argo-pi
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClass: local-path
+  resources:
+    requests:
+      cpu: 20m
+      memory: 32Mi
+    limits:
+      memory: 96Mi
 
 kube-state-metrics:
   enabled: true
