@@ -1,0 +1,27 @@
+---
+- name: Install chrony lab allow-list
+  ansible.builtin.copy:
+    src: lab.conf
+    dest: /etc/chrony/conf.d/lab.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart chrony
+
+- name: Persist UDP 123 accept rule
+  ansible.builtin.copy:
+    src: ntp-allow.service
+    dest: /etc/systemd/system/ntp-allow.service
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Enable ntp-allow and chrony
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: "{{ item }}"
+    enabled: true
+    state: started
+  loop:
+    - ntp-allow.service
+    - chrony.service

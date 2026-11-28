@@ -1,0 +1,12 @@
+[Unit]
+Description=Allow NTP client queries on UDP 123
+After=network-pre.target
+Before=chrony.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/sh -c '/usr/sbin/iptables -C INPUT -p udp --dport 123 -j ACCEPT 2>/dev/null || /usr/sbin/iptables -I INPUT -p udp --dport 123 -j ACCEPT'
+
+[Install]
+WantedBy=multi-user.target

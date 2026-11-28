@@ -1,0 +1,9 @@
+---
+- name: Allow dimi to sudo without a password
+  ansible.builtin.copy:
+    src: 010_dimi-nopasswd
+    dest: /etc/sudoers.d/010_dimi-nopasswd
+    owner: root
+    group: root
+    mode: "0440"
+    validate: visudo -cf %s
